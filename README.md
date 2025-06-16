@@ -50,7 +50,36 @@ docker run --rm \
 
 > 🔁 The --patch_level parameter is optional. If not specified, it will default to 1.
 
----
+
+### 🧑‍💻 Running Docker Without Root Permissions (Recommended)
+
+By default, Docker containers run as the `root` user. This means that any files created inside the container may be owned by `root` on your local machine, potentially causing **permission issues** when trying to edit or delete them later.
+
+To avoid this, you can run the container as your **local user** using the `--user` option:
+
+```bash
+--user $(id -u):$(id -g)
+```
+
+- `$(id -u)` returns your user ID (UID)
+- `$(id -g)` returns your group ID (GID)
+
+This tells Docker to run the container using your local UID and GID, ensuring that any files generated (like logs, CSVs, features) are accessible and editable by your user.
+
+#### Example: Run with Correct User Permissions
+
+```bash
+docker run --rm \
+  --user $(id -u):$(id -g) \
+  -v /path/to/local/input:/app/input \
+  -v /path/to/local/output:/app/output \
+  kalimuthu_infer_image \
+  --patch_level 1
+```
+
+This ensures that all files written to /app/output inside the container are automatically owned by the user executing the command on the host machine.
+
+> ⚠️ Note: This method is especially important when sharing files between the container and your host machine, as it avoids `Permission Denied` errors when editing output files after the container finishes.
 
 ## 📁 Output Folder Structure
 
