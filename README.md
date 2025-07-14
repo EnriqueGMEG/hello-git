@@ -1,10 +1,14 @@
 # 🧠 CLAM Inference Pipeline for WSIs – Dockerized
 
-This Docker container executes a full inference pipeline using a trained CLAM model for classification of Whole Slide Images (WSIs), following the methodology described by Kalimuthu et al. It performs:
+This Docker container executes a full inference pipeline using an ensemble of 5 cross-validated CLAM models for the classification of Whole Slide Images (WSIs), following the methodology described by Kalimuthu et al.
 
-1. Patch extraction from WSIs
-2. Feature extraction from patches using a Vision Transformer
-3. Slide-level inference using a trained CLAM model
+The pipeline performs the following steps automatically:
+
+1. Patch Extraction: Generates image patches from input WSIs.
+
+2. Feature Extraction: Extracts high-dimensional features from these patches using a Vision Transformer (UNI model).
+
+3. Ensemble Inference: Performs slide-level classification using an ensemble of 5 pre-trained CLAM models. The final prediction is determined by majority voting across the individual models, each applying its own optimal Youden's Index threshold.
 
 ---
 
@@ -13,7 +17,7 @@ This Docker container executes a full inference pipeline using a trained CLAM mo
 To run the container, you must:
 
 1. Create two folders on your local machine:
-    - **Input folder**: Local directory with the WSIs (in `.svs`, `.tif`, `.ndpi`, or `.tiff` format)
+    - **Input folder**: Local directory with the WSIs (in `.svs`, `.tif`, `.tiff` format)
     - **Output folder**: Directory where all intermediate and final results will be saved
 
 2. Provide the `--patch_level` parameter at runtime:
@@ -95,19 +99,30 @@ output/
     ├── h5_files/      # Contains the HDF5 files with patch metadata (location, size, etc.)
     └── pt_files/      # Extracted feature tensors (.pt) used for model inference
 ├── process_slides.csv # CSV with processed slide IDs
-└── inference_predictions.csv # Final slide-level predictions
+├── inference_summary_predictions.csv # Final slide-level predictions
+└── inference_detailed_predictions.csv # Slide-level predictions of each model
 ```
 
 ### 📄 Description of Output Files
 
-- **`inference_predictions.csv`**  
+- **`inference_summary_predictions.csv`**  
   Contains the final classification results for each slide. It includes the following columns:
 
   | Column                     | Description                                      |
   |----------------------------|--------------------------------------------------|
   | `slide_id`                 | ID of the processed slide                        |
-  | `predicted_class`          | Predicted class label (0 or 1)                   |
-  | `positive_class_probability` | Probability of the slide belonging to class 1 |
+  | `predicted_class`          | Predicted class label (0 or 1) resulting of majority voting  |
+
+- **`inference_detailed_predictions.csv`**  
+  Contains the detailed classification results for each slide. It includes the following columns:
+
+  | Column                     | Description                                      |
+  |----------------------------|--------------------------------------------------|
+  | `slide_id`                 | ID of the processed slide                        |
+  | `Model_X_Predicted_Probability_Class_1` | Predicted probability of the slide belonging to class 1, as determined by a specific cross-validation model (Model X) |
+  | `Model_X_Optimal_Threshold` | Optimal Youden's Index threshold used by a specific cross-validation model (Model X) to make its binary prediction |
+  | `Model_X_Individual_Binary_Prediction` | Prediction (0 or 1) made by a specific cross-validation model (Model X) for the slide, based on its predicted probability and optimal threshold |
+  
   
 - **`process_slides.csv`**  
   Keeps track of which slides have already been processed, to avoid repeating patch extraction and feature computation.
@@ -179,10 +194,10 @@ docker run --rm \
   --patch_level 1
 ```
 
-### 4. View results in `output/inference_predictions.csv`:
+### 4. View results in `output/inference_summary_predictions.csv`:
 
 ```bash
-cat output/inference_predictions.csv
+cat output/inference_summary_predictions.csv
 ```
 
 ---
