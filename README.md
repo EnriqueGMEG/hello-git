@@ -216,7 +216,14 @@ If you encounter any problems, please check:
 - That Docker has the right permissions to access input/output folders
 - That your system has enough RAM/VRAM for patching and feature extraction
 
+If you have questions or encounter issues not covered here, please contact us:
+
+📧 **Support contacts**:  
+- promeroj@cnio.es  
+- elopezl@cnio.es
+- ssabroso@cnio.es
+
 ---
 
-© 2025 – CLAM WSI Dockerized Inference
+© 2025 – Kalimuthu WSI Dockerized Inference
 
