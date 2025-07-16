@@ -150,15 +150,21 @@ To run with GPU, your local machine must have:
 - **Docker Engine** installed
 - **NVIDIA Container Toolkit** installed
 
-#### Install NVIDIA Container Toolkit
+### Installing NVIDIA Container Toolkit
 
-```bash
-sudo apt-get update
-sudo apt-get install -y nvidia-container-toolkit
-sudo systemctl restart docker
-```
+**Follow the official installation guide** from NVIDIA to install and configure the container toolkit:
 
-#### Verify GPU Access from Docker
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+
+This includes:
+
+- Adding the official NVIDIA repository
+- Installing `nvidia-container-toolkit`
+- Configuring Docker to use the `nvidia` runtime
+
+> ⚠️ Without this, the container will **not be able to access the GPU**, even if one is present.
+
+### Verify GPU Access from Docker
 
 ```bash
 docker run --rm --gpus all nvidia/cuda:11.8.0-base nvidia-smi
