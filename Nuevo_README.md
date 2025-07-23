@@ -27,8 +27,8 @@ To run the container, you must:
 
 | Parameter     | Description                                                                            |
 |---------------|----------------------------------------------------------------------------------------|
-| `-v /path/to/input:/app/input`  | Maps your local WSI folder to the container’s `/app/input` folder    |
-| `-v /path/to/output:/app/output`| Maps your local results folder to `/app/output` inside the container |
+| `-v /local/input:/input`  | Maps your local WSI folder to the container’s `/input` folder    |
+| `-v /local/output:/output`| Maps your local results folder to `/output` inside the container |
 | `--patch_level` | Level of downsampling (OpenSlide level)                             |
 
 ### ✅ `--patch_level` Parameter
@@ -44,8 +44,10 @@ This parameter defines the resolution level of the WSI to use when extracting pa
 
 ```bash
 docker run --rm \
-  -v /path/to/local/input:/app/input \
-  -v /path/to/local/output:/app/output \
+  -v /local/input:/input \
+  -v /local/output:/output \
+  -e DATA_INPUT=/input \
+  -e DATA_OUTPUT=/output \
   kalimuthu_infer_image \
   --patch_level 1
 ```
@@ -75,8 +77,10 @@ This tells Docker to run the container using your local UID and GID, ensuring th
 ```bash
 docker run --rm \
   --user $(id -u):$(id -g) \
-  -v /path/to/local/input:/app/input \
-  -v /path/to/local/output:/app/output \
+  -v /local/input:/input \
+  -v /local/output:/output \
+  -e DATA_INPUT=/input \
+  -e DATA_OUTPUT=/output \
   kalimuthu_infer_image \
   --patch_level 1
 ```
@@ -194,8 +198,11 @@ cp your_slide.svs input/
 
 ```bash
 docker run --rm \
-  -v /path/to/local/input:/app/input \
-  -v /path/to/local/output:/app/output \
+  --user $(id -u):$(id -g) \
+  -v /local/input:/input \
+  -v /local/output:/output \
+  -e DATA_INPUT=/input \
+  -e DATA_OUTPUT=/output \
   kalimuthu_infer_image \
   --patch_level 1
 ```
