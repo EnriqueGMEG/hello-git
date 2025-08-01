@@ -86,6 +86,41 @@ docker run --rm \
 
 ---
 
+### 🔍 How Paths and Environment Variables Work
+
+#### 📁 Working Directory: `/opt/app`
+
+The container uses `/opt/app` as its working directory (instead of `/app`) to ensure compatibility with cloud and cluster environments that do not allow writing in the root-level `/app` folder. This avoids permission errors when running as a non-root user.
+
+#### 🧱 Environment Variables
+
+The container defines three key environment variables internally:
+
+| Variable              | Default Value         | Description                                        |
+| --------------------- | --------------------- | -------------------------------------------------- |
+| `DATA_INPUT`          | `/mnt/storage/input`  | Directory where WSIs are read from                 |
+| `DATA_OUTPUT`         | `/mnt/storage/output` | Directory where results are written                |
+| `DATA_INPUT_BASE_DIR` | `/mnt/storage`        | Base directory used to define temporary subfolders |
+
+📅 These are **already set in the Docker image** — you don’t need to pass them manually in most cases.
+
+#### 🔄 Overriding Environment Variables
+
+If your execution platform requires different paths (e.g. `/mnt/storage/output/CNIO`), you can override the defaults by passing `-e` flags at runtime:
+
+```bash
+docker run --rm \
+  -v /local/input:/mnt/storage/input \
+  -v /local/output:/mnt/storage/output/CNIO \
+  -e DATA_OUTPUT=/mnt/storage/output/CNIO \
+  kalimuthu_infer_image \
+  --patch_level 1
+```
+
+This overrides `DATA_OUTPUT` and ensures the algorithm writes to a location that your infrastructure can later access and export.
+
+---
+
 ## 📁 Output Folder Structure
 
 After running, the output directory will contain:
