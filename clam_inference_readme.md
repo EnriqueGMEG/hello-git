@@ -228,10 +228,8 @@ cp your_slide.svs input/
 ```bash
 docker run --rm \
   --user $(id -u):$(id -g) \
-  -e DATA_INPUT=/mnt/storage/input \
-  -e DATA_OUTPUT=/mnt/storage/output \
-  -v $(pwd)/input:/mnt/storage/input \
-  -v $(pwd)/output:/mnt/storage/output \
+  -v local/input:/mnt/storage/input \
+  -v local/output:/mnt/storage/output \
   kalimuthu_infer_image \
   --patch_level 1
 ```
