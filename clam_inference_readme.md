@@ -44,7 +44,6 @@ This parameter defines the resolution level of the WSI to use when extracting pa
 
 ```bash
 docker run --rm \
-  --user $(id -u):$(id -g) \
   -e DATA_INPUT=/mnt/storage/input \
   -e DATA_OUTPUT=/mnt/storage/output \
   -v /local/input:/mnt/storage/input \
@@ -75,7 +74,6 @@ This ensures that all files generated inside the mounted output folder are owned
 ```bash
 docker run --rm \
   --user $(id -u):$(id -g) \
-  -e MPLCONFIGDIR=/tmp \
   -e DATA_INPUT=/mnt/storage/input \
   -e DATA_OUTPUT=/mnt/storage/output \
   -v /local/input:/mnt/storage/input \
