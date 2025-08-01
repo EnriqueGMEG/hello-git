@@ -193,7 +193,6 @@ cp your_slide.svs input/
 ```bash
 docker run --rm \
   --user $(id -u):$(id -g) \
-  -e MPLCONFIGDIR=/tmp \
   -e DATA_INPUT=/mnt/storage/input \
   -e DATA_OUTPUT=/mnt/storage/output \
   -v $(pwd)/input:/mnt/storage/input \
