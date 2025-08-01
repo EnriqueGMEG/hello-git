@@ -54,6 +54,7 @@ docker run --rm \
 ```
 
 > 🖼️ `kalimuthu_infer_image` is the name of the Docker image.
+> 🔁 The --patch_level parameter is optional. If not specified, it will default to 1.
 
 
 ### 🧑‍💻 Running Docker Without Root Permissions (Recommended)
