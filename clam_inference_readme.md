@@ -107,28 +107,29 @@ output/
 ### 📄 Description of Output Files
 
 - **`inference_summary_predictions.csv`**  
-  Contains the final classification results for each slide:
+  Contains the final classification results for each slide. It includes the following columns:
 
   | Column                     | Description                                      |
   |----------------------------|--------------------------------------------------|
   | `slide_id`                 | ID of the processed slide                        |
-  | `predicted_class`          | Predicted class label (0 or 1) resulting from majority voting  |
+  | `predicted_class`          | Predicted class label (0 or 1) resulting of majority voting  |
 
 - **`inference_detailed_predictions.csv`**  
-  Contains per-model prediction details:
+  Contains the detailed classification results for each slide. It includes the following columns:
 
-  | Column                                 | Description                                                  |
-  |----------------------------------------|--------------------------------------------------------------|
-  | `slide_id`                             | ID of the processed slide                                    |
-  | `Model_X_Predicted_Probability_Class_1`| Predicted probability for class 1 by model X                |
-  | `Model_X_Optimal_Threshold`            | Threshold used by model X (Youden Index from training)       |
-  | `Model_X_Individual_Binary_Prediction` | Final binary decision made by model X                        |
-
-- **`process_slides.csv`**  
-  Tracks which slides were already processed.
+  | Column                     | Description                                      |
+  |----------------------------|--------------------------------------------------|
+  | `slide_id`                 | ID of the processed slide                        |
+  | `Model_X_Predicted_Probability_Class_1` | Predicted probability of the slide belonging to class 1, as determined by a specific cross-validation model (Model X) |
+  | `Model_X_Optimal_Threshold` | Optimal Youden's Index threshold used by a specific cross-validation model (Model X) to make its binary prediction |
+  | `Model_X_Individual_Binary_Prediction` | Prediction (0 or 1) made by a specific cross-validation model (Model X) for the slide, based on its predicted probability and optimal threshold |
   
-  - ✅ New slides will be automatically appended.
-  - ⚠️ To reprocess a slide, remove it manually from this file.
+  
+- **`process_slides.csv`**  
+  Keeps track of which slides have already been processed, to avoid repeating patch extraction and feature computation.
+
+  - ✅ If you add a new image, it will be appended to this file and processed as expected.
+  - ⚠️ If you want to **re-run the full pipeline** (patch extraction + feature extraction + inference) on a slide that’s already in the file, you **must manually delete that row** from `process_slides.csv`.
 
 ---
 
