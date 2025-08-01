@@ -45,7 +45,6 @@ This parameter defines the resolution level of the WSI to use when extracting pa
 ```bash
 docker run --rm \
   --user $(id -u):$(id -g) \
-  -e MPLCONFIGDIR=/tmp \
   -e DATA_INPUT=/mnt/storage/input \
   -e DATA_OUTPUT=/mnt/storage/output \
   -v /local/input:/mnt/storage/input \
@@ -55,7 +54,6 @@ docker run --rm \
 ```
 
 > 🖼️ `kalimuthu_infer_image` is the name of the Docker image.
-> ⚖️ `MPLCONFIGDIR=/tmp` avoids permission issues with matplotlib cache when running without root.
 
 
 ### 🧑‍💻 Running Docker Without Root Permissions (Recommended)
